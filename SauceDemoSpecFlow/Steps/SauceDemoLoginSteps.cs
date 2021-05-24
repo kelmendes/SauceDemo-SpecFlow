@@ -43,5 +43,18 @@ namespace SauceDemoSpecFlow.Steps
             LoginSteps.fazerlogout();
             Hook.tearDown();
         }
+
+        [Then(@"Devo ser exibido um alerta que o esse usuario está bloqueado")]
+        public void ThenDevoSerExibidoUmAlertaQueOEsseUsuarioEstaBloqueado()
+        {
+            Hook.tearDown();
+        }
+
+        [Then(@"Devo ser exibido um alerta que o esse usuario ou senha está errado")]
+        public void ThenDevoSerExibidoUmAlertaQueOEsseUsuarioOuSenhaEstaErrado()
+        {
+            Hook.tearDown();
+        }
+
     }
 }

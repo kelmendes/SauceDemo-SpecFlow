@@ -13,3 +13,15 @@ Scenario Outline: Validação do Login com usuário ativo
         | nome_user       | passwd_user   |
         | standard_user   | secret_sauce  |
         | performance_glitch_user | secret_sauce  |
+
+@LoginUserBlock
+Scenario: Validação do Login com usuário bloqueado
+    And Informo o nome de "locked_out_user" e "locked_out_user" válidos
+    When Clico no botão login
+    Then Devo ser exibido um alerta que o esse usuario está bloqueado
+
+@LoginInvalidUser
+Scenario: Validação do Login com usuário errado
+    And Informo o nome de "locked_out_user" e "senha_errada" válidos
+    When Clico no botão login
+    Then Devo ser exibido um alerta que o esse usuario ou senha está errado
