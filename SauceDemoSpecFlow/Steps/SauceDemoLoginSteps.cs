@@ -26,11 +26,12 @@ namespace SauceDemoSpecFlow.Steps
         }
         
         [When(@"Clico no botão login")]
+        [Given(@"Clico no botão login")]
         public void WhenClicoNoBotaoLogin()
         {
             LoginSteps.clicarBotãoLogin();
         }
-        
+
         [Then(@"Devo ser redirecionado para tela inicial do Digital")]
         public void ThenDevoSerRedirecionadoParaTelaInicialDoDigital()
         {
