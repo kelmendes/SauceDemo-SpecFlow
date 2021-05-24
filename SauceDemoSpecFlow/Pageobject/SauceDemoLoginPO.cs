@@ -36,7 +36,14 @@ namespace SauceDemoSpecFlow.PageObjects
 
         public bool alertErroLoginCheck()
         {
-            return Hook.getDrivers().FindElement(By.XPath(alertErroLogin)).Displayed;
+            bool temp = false;
+            try
+            {
+                temp = Hook.getDrivers().FindElement(By.XPath(alertErroLogin)).Displayed;
+                return temp;
+            }
+            catch (Exception NoSuchElementException){}
+            return temp;
         }
 
         public IWebElement botãoMenuLateral()

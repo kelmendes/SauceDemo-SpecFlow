@@ -1,4 +1,5 @@
-﻿using SauceDemoSpecFlow.PageObjects;
+﻿using NUnit.Framework;
+using SauceDemoSpecFlow.PageObjects;
 using SauceDemoSpecFlow.Stepdefinition.Hook;
 using System;
 using System.Collections.Generic;
@@ -24,6 +25,11 @@ namespace SauceDemoSpecFlow.Models
         {
             LoginPO.botãoMenuLateral().Click();
             LoginPO.botãoLogoutMenuLateral().Click();
+        }
+
+        internal void alertaUsuarioBloqueadoOuUsuarioErrado()
+        {
+            Assert.IsTrue(LoginPO.alertErroLoginCheck(), "[ASSERT] - Alerta não está pesente!");
         }
     }
 }

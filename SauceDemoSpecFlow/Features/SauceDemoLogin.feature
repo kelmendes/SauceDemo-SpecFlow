@@ -22,6 +22,6 @@ Scenario: Validação do Login com usuário bloqueado
 
 @LoginInvalidUser
 Scenario: Validação do Login com usuário errado
-    And Informo o nome de "locked_out_user" e "senha_errada" válidos
+    And Informo o nome de "standard_user" e "senha_errada" válidos
     When Clico no botão login
     Then Devo ser exibido um alerta que o esse usuario ou senha está errado

@@ -217,7 +217,7 @@ this.ScenarioInitialize(scenarioInfo);
 this.FeatureBackground();
 #line hidden
 #line 25
-    testRunner.And("Informo o nome de \"locked_out_user\" e \"senha_errada\" válidos", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+    testRunner.And("Informo o nome de \"standard_user\" e \"senha_errada\" válidos", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 26
     testRunner.When("Clico no botão login", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
