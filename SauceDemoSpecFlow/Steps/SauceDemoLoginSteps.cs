@@ -1,4 +1,7 @@
-﻿using OpenQA.Selenium;
+﻿using AventStack.ExtentReports;
+using AventStack.ExtentReports.Gherkin.Model;
+using AventStack.ExtentReports.Reporter;
+using OpenQA.Selenium;
 using SauceDemoSpecFlow.Models;
 using SauceDemoSpecFlow.Stepdefinition.Hook;
 using System;
@@ -15,7 +18,7 @@ namespace SauceDemoSpecFlow.Steps
         [Given(@"Dado que consigo   carregar a aplicação")]
         public void GivenDadoQueConsigoCarregarAAplicacao()
         { 
-            driver = Hook.getDrivers();
+            driver = Hook.getDrivers();        
         }
         
         [Given(@"Informo o nome de ""(.*)"" e ""(.*)"" válidos")]
@@ -41,21 +44,18 @@ namespace SauceDemoSpecFlow.Steps
         public void ThenEntaoDeveFazerLogout()
         {
             LoginSteps.fazerlogout();
-            Hook.tearDown();
         }
 
         [Then(@"Devo ser exibido um alerta que o esse usuario está bloqueado")]
         public void ThenDevoSerExibidoUmAlertaQueOEsseUsuarioEstaBloqueado()
         {
             LoginSteps.alertaUsuarioBloqueadoOuUsuarioErrado();
-            Hook.tearDown();
         }
 
         [Then(@"Devo ser exibido um alerta que o esse usuario ou senha está errado")]
         public void ThenDevoSerExibidoUmAlertaQueOEsseUsuarioOuSenhaEstaErrado()
         {
             LoginSteps.alertaUsuarioBloqueadoOuUsuarioErrado();
-            Hook.tearDown();
         }
 
     }

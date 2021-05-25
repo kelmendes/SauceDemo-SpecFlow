@@ -1,9 +1,5 @@
 ﻿using NUnit.Framework;
 using SauceDemoSpecFlow.PageObjects;
-using SauceDemoSpecFlow.Stepdefinition.Hook;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace SauceDemoSpecFlow.Models
 {
