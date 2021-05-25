@@ -13,21 +13,15 @@ namespace SauceDemoSpecFlow.Stepdefinition.Hook
     static class Hook
     {
         private static IWebDriver driver;
-
         private static ExtentTest featureName;
         private static ExtentTest scenario;
         private static ExtentReports extent;
         public static string ReportPath;
 
-        
-        
-        
-
         public static IWebDriver getDrivers()
         {
             return driver;
         }
-
 
         // ExtentReport
         [BeforeTestRun]
