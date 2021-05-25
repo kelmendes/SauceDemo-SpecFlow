@@ -10,10 +10,8 @@ namespace SauceDemoSpecFlow.Pageobject
     {
         private IWebDriver driver;
         public String divContainerListaDeItensHome = "//*[@id='inventory_container']";
-
         public String spanQtdItensCarrinho = "//span[@class='shopping_cart_badge']";
         public String cartIcone = "//a[@class='shopping_cart_link']";
-
         public String btnCheckout = "//*[@id='checkout']";
         public String inputCheckoutName = "//*[@id='first-name']";
         public String inputCheckoutLastName = "//*[@id='last-name']";
@@ -23,7 +21,7 @@ namespace SauceDemoSpecFlow.Pageobject
 
         public SauceDemoCartPO()
         {
-            // driver = Hook.getDrivers();
+            driver = Hook.getDrivers();
         }
 
         public bool validarCarregamentoSistemaAposLogin()
@@ -31,7 +29,7 @@ namespace SauceDemoSpecFlow.Pageobject
             bool temp = false;
             try
             {
-                temp = Hook.getDrivers().FindElement(By.XPath(divContainerListaDeItensHome)).Displayed;
+                temp = driver.FindElement(By.XPath(divContainerListaDeItensHome)).Displayed;
                 return temp;
             }
             catch (Exception erro) { }
@@ -40,61 +38,66 @@ namespace SauceDemoSpecFlow.Pageobject
 
         public IWebElement adicionarItemCarrinho(String intenAdicionar)
         {
-            return Hook.getDrivers().FindElement(By.XPath("//div[text()='" + intenAdicionar + "']/../../../div[2]/button"));
+            return driver.FindElement(By.XPath("//div[text()='" + intenAdicionar + "']/../../../div[2]/button"));
         }
 
         public bool listaDeItensHome()
         {
-            return Hook.getDrivers().FindElement(By.XPath(divContainerListaDeItensHome)).Displayed;
+            return driver.FindElement(By.XPath(divContainerListaDeItensHome)).Displayed;
         }
 
         public IWebElement cartIcones()
         {
-            return Hook.getDrivers().FindElement(By.XPath(cartIcone));
+            return driver.FindElement(By.XPath(cartIcone));
         }
 
         public IWebElement quantidadeItensCarrinho()
         {
-            return Hook.getDrivers().FindElement(By.XPath(spanQtdItensCarrinho));
-            //return Integer.parseInt(strQuantideCart);
+            return driver.FindElement(By.XPath(spanQtdItensCarrinho));
         }
 
         public IWebElement botãoCheckout()
         {
-            //scrollToElement(By.XPath(btnCheckout));
-            return Hook.getDrivers().FindElement(By.XPath(btnCheckout));
+            return driver.FindElement(By.XPath(btnCheckout));
         }
 
         public IWebElement setInputCheckoutName( )
         {
-            return Hook.getDrivers().FindElement(By.XPath(inputCheckoutName));
+            return driver.FindElement(By.XPath(inputCheckoutName));
         }
 
         public IWebElement setInputCheckoutLastName()
         {
-            return Hook.getDrivers().FindElement(By.XPath(inputCheckoutLastName));
+            return driver.FindElement(By.XPath(inputCheckoutLastName));
         }
 
-        public IWebElement setInputCheckoutCEP(String strInputCheckoutCEP)
+        public IWebElement setInputCheckoutCEP()
         {
-            return Hook.getDrivers().FindElement(By.XPath(inputCheckoutCEP));
+            return driver.FindElement(By.XPath(inputCheckoutCEP));
         }
 
         public IWebElement botãoCheckoutContinue()
         {
-            //scrollToElement(By.XPath(btnCheckoutContinue));
-            return Hook.getDrivers().FindElement(By.XPath(btnCheckoutContinue));
+            return driver.FindElement(By.XPath(btnCheckoutContinue));
         }
 
         public IWebElement botãoFinish()
         {
-            //scrollToElement(By.XPath(btnFinish));
-            return Hook.getDrivers().FindElement(By.XPath(btnFinish));
+            return driver.FindElement(By.XPath(btnFinish));
         }
 
         public bool verificarItenNoCarrinho(String strNomeItem)
         {
-            return Hook.getDrivers().FindElement(By.XPath("//div[text()='" + strNomeItem + "']")).Displayed;
+            return driver.FindElement(By.XPath("//div[text()='" + strNomeItem + "']")).Displayed;
+        }
+
+        public bool validarTelaDespachoOrdem()
+        {
+            //h2[@class='complete-header'] = THANK YOU FOR YOUR ORDER
+            //div[@class='complete-text'] = Your order has been dispatched, and will arrive just as fast as the pony can get there!
+            bool val1 = driver.FindElement(By.XPath("//h2[@class='complete-header']")).Displayed;
+            bool val2 = driver.FindElement(By.XPath("//div[@class='complete-text']")).Displayed;
+            return (val1 && val2);
         }
     }
 }

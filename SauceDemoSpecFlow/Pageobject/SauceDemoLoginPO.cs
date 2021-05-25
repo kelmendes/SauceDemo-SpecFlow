@@ -16,22 +16,22 @@ namespace SauceDemoSpecFlow.PageObjects
 
         public SauceDemoLoginPO()
         {
-           // driver = Hook.getDrivers();
+            driver = Hook.getDrivers();
         }
 
         public IWebElement InputUserName()
         {
-            return Hook.getDrivers().FindElement(By.XPath(inputUserName));
+            return driver.FindElement(By.XPath(inputUserName));
         }
 
         public IWebElement InputPassword()
         {
-            return Hook.getDrivers().FindElement(By.XPath(inputPassword));
+            return driver.FindElement(By.XPath(inputPassword));
         }
 
         public IWebElement botãoLogin()
         {
-            return Hook.getDrivers().FindElement(By.XPath(btnLogin));
+            return driver.FindElement(By.XPath(btnLogin));
         }
 
         public bool alertErroLoginCheck()
@@ -39,7 +39,7 @@ namespace SauceDemoSpecFlow.PageObjects
             bool temp = false;
             try
             {
-                temp = Hook.getDrivers().FindElement(By.XPath(alertErroLogin)).Displayed;
+                temp = driver.FindElement(By.XPath(alertErroLogin)).Displayed;
                 return temp;
             }
             catch (Exception NoSuchElementException){}
@@ -48,12 +48,12 @@ namespace SauceDemoSpecFlow.PageObjects
 
         public IWebElement botãoMenuLateral()
         {
-            return Hook.getDrivers().FindElement(By.XPath(btnMenuLateral));
+            return driver.FindElement(By.XPath(btnMenuLateral));
         }
 
         public IWebElement botãoLogoutMenuLateral()
         {
-            return Hook.getDrivers().FindElement(By.XPath(btnLogoutMenuLateral));
+            return driver.FindElement(By.XPath(btnLogoutMenuLateral));
         }
     }
 }

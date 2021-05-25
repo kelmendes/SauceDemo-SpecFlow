@@ -14,8 +14,7 @@ namespace SauceDemoSpecFlow.Steps
 
         [Given(@"Dado que consigo   carregar a aplicação")]
         public void GivenDadoQueConsigoCarregarAAplicacao()
-        {
-            //Hook.SetUp();
+        { 
             driver = Hook.getDrivers();
         }
         
