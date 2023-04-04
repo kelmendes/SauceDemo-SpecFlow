@@ -18,6 +18,9 @@ namespace SauceDemoSpecFlow.Stepdefinition.Hook
         private static ExtentReports extent;
         public static string ReportPath;
 
+        public static String dir = AppDomain.CurrentDomain.BaseDirectory;
+        public static String testResultPath = dir.Replace("bin\\Debug\\net5.0", "TestResults");
+
         public static IWebDriver getDrivers()
         {
             return driver;
@@ -27,22 +30,22 @@ namespace SauceDemoSpecFlow.Stepdefinition.Hook
         [BeforeTestRun]
         public static void BeforeTestRun()
         {
-            ExtentHtmlReporter htmlReporter = new ExtentHtmlReporter(@"C:\report\ExtentReport.html");
+            ExtentHtmlReporter htmlReporter = new ExtentHtmlReporter(testResultPath);
             htmlReporter.Config.Theme = AventStack.ExtentReports.Reporter.Configuration.Theme.Standard;
             extent = new ExtentReports();
             extent.AttachReporter(htmlReporter);
         }
 
         [BeforeFeature]
-        public static void BeforeFeature()
+        public static void BeforeFeature(FeatureContext _featureContext)
         {
             //Create dynamic feature name
-            featureName = extent.CreateTest<Feature>(FeatureContext.Current.FeatureInfo.Title);
-            Console.WriteLine("BeforeFeature");
+            featureName = extent.CreateTest<Feature>(_featureContext.FeatureInfo.Title);
+             Console.WriteLine("BeforeFeature");
         }
 
         [BeforeScenario]
-        public static void BeforeScenario()
+        public static void BeforeScenario(ScenarioContext _scenarioContext)
         {
             driver = new ChromeDriver();
             driver.Manage().Window.Maximize();
@@ -50,40 +53,41 @@ namespace SauceDemoSpecFlow.Stepdefinition.Hook
             driver.Navigate().GoToUrl("https://www.saucedemo.com/");
 
             Console.WriteLine("BeforeScenario");
-            scenario = featureName.CreateNode<Scenario>(ScenarioContext.Current.ScenarioInfo.Title);
+            scenario = featureName.CreateNode<Scenario>(_scenarioContext.ScenarioInfo.Title);
         }
 
         [AfterStep]
-        public static void InsertReportingSteps()
+        public static void InsertReportingSteps(ScenarioContext _scenarioContext)
         {
             var stepType = ScenarioStepContext.Current.StepInfo.StepDefinitionType.ToString();
-            if (ScenarioContext.Current.TestError == null)
+            if (_scenarioContext.StepContext.TestError == null)
             {
                 if (stepType == "Given")
                     scenario.CreateNode<Given>(ScenarioStepContext.Current.StepInfo.Text);
-                else if(stepType == "When")
-                                scenario.CreateNode<When>(ScenarioStepContext.Current.StepInfo.Text);
-                else if(stepType == "Then")
-                                scenario.CreateNode<Then>(ScenarioStepContext.Current.StepInfo.Text);
-                else if(stepType == "And")
-                                scenario.CreateNode<And>(ScenarioStepContext.Current.StepInfo.Text);
+                else if (stepType == "When")
+                    scenario.CreateNode<When>(ScenarioStepContext.Current.StepInfo.Text);
+                else if (stepType == "Then")
+                    scenario.CreateNode<Then>(ScenarioStepContext.Current.StepInfo.Text);
+                else if (stepType == "And")
+                    scenario.CreateNode<And>(ScenarioStepContext.Current.StepInfo.Text);
             }
-            else if(ScenarioContext.Current.TestError != null)
+            else if (_scenarioContext.StepContext.TestError != null)
             {
                 if (stepType == "Given")
                 {
-                    scenario.CreateNode<Given>(ScenarioStepContext.Current.StepInfo.Text).Fail(ScenarioContext.Current.TestError.Message);
+                    scenario.CreateNode<Given>(ScenarioStepContext.Current.StepInfo.Text).Fail(_scenarioContext.StepContext.TestError.Message);
                 }
-                else if(stepType == "When")
+                else if (stepType == "When")
                 {
-                    scenario.CreateNode<When>(ScenarioStepContext.Current.StepInfo.Text).Fail(ScenarioContext.Current.TestError.Message);
+                    scenario.CreateNode<When>(ScenarioStepContext.Current.StepInfo.Text).Fail(_scenarioContext.StepContext.TestError.Message);
                 }
-                else if(stepType == "Then") {
-                    scenario.CreateNode<Then>(ScenarioStepContext.Current.StepInfo.Text).Fail(ScenarioContext.Current.TestError.Message);
-                }
-                else if(stepType == "And")
+                else if (stepType == "Then")
                 {
-                    scenario.CreateNode<And>(ScenarioStepContext.Current.StepInfo.Text).Fail(ScenarioContext.Current.TestError.Message);
+                    scenario.CreateNode<Then>(ScenarioStepContext.Current.StepInfo.Text).Fail(_scenarioContext.StepContext.TestError.Message);
+                }
+                else if (stepType == "And")
+                {
+                    scenario.CreateNode<And>(ScenarioStepContext.Current.StepInfo.Text).Fail(_scenarioContext.StepContext.TestError.Message);
                 }
             }
         }
