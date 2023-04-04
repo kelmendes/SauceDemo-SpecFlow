@@ -1,25 +1,24 @@
 ﻿using AventStack.ExtentReports;
 using AventStack.ExtentReports.Gherkin.Model;
-using AventStack.ExtentReports.Reporter;
-using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using System;
 using TechTalk.SpecFlow;
+using SauceDemoSpecFlow.utility;
+using BoDi;
 
 namespace SauceDemoSpecFlow.Stepdefinition.Hook
 {
     [Binding]
-    static class Hook
+    public class Hook : ExtentReport
     {
         private static IWebDriver driver;
-        private static ExtentTest featureName;
-        private static ExtentTest scenario;
-        private static ExtentReports extent;
-        public static string ReportPath;
+        private readonly IObjectContainer _container;
 
-        public static String dir = AppDomain.CurrentDomain.BaseDirectory;
-        public static String testResultPath = dir.Replace("bin\\Debug\\net5.0", "TestResults");
+        public Hook(IObjectContainer container)
+        {
+            _container = container;
+        }
 
         public static IWebDriver getDrivers()
         {
@@ -30,66 +29,77 @@ namespace SauceDemoSpecFlow.Stepdefinition.Hook
         [BeforeTestRun]
         public static void BeforeTestRun()
         {
-            ExtentHtmlReporter htmlReporter = new ExtentHtmlReporter(testResultPath);
-            htmlReporter.Config.Theme = AventStack.ExtentReports.Reporter.Configuration.Theme.Standard;
-            extent = new ExtentReports();
-            extent.AttachReporter(htmlReporter);
+            ExtentReportStart();
         }
 
         [BeforeFeature]
         public static void BeforeFeature(FeatureContext _featureContext)
         {
             //Create dynamic feature name
-            featureName = extent.CreateTest<Feature>(_featureContext.FeatureInfo.Title);
              Console.WriteLine("BeforeFeature");
+            _feature = _extentReports.CreateTest<Feature>(_featureContext.FeatureInfo.Title);
         }
 
         [BeforeScenario]
         public static void BeforeScenario(ScenarioContext _scenarioContext)
         {
-            driver = new ChromeDriver();
+            Console.WriteLine("BeforeScenario");
+            _scenario = _feature.CreateNode<Scenario>(_scenarioContext.ScenarioInfo.Title);
+
+
+            ChromeOptions options = new ChromeOptions();
+            options.AddArguments("headless");
+
+            driver = new ChromeDriver(options);
             driver.Manage().Window.Maximize();
             driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(30);
             driver.Navigate().GoToUrl("https://www.saucedemo.com/");
 
-            Console.WriteLine("BeforeScenario");
-            scenario = featureName.CreateNode<Scenario>(_scenarioContext.ScenarioInfo.Title);
+            
+            
         }
 
         [AfterStep]
         public static void InsertReportingSteps(ScenarioContext _scenarioContext)
         {
             var stepType = ScenarioStepContext.Current.StepInfo.StepDefinitionType.ToString();
+            String StepInfo = ScenarioStepContext.Current.StepInfo.Text;
+
             if (_scenarioContext.StepContext.TestError == null)
             {
                 if (stepType == "Given")
-                    scenario.CreateNode<Given>(ScenarioStepContext.Current.StepInfo.Text);
+                    _scenario.CreateNode<When>(StepInfo).AddScreenCaptureFromBase64String(addScreenshot(driver, _scenarioContext));
                 else if (stepType == "When")
-                    scenario.CreateNode<When>(ScenarioStepContext.Current.StepInfo.Text);
+                    _scenario.CreateNode<When>(StepInfo).AddScreenCaptureFromBase64String(addScreenshot(driver, _scenarioContext));
                 else if (stepType == "Then")
-                    scenario.CreateNode<Then>(ScenarioStepContext.Current.StepInfo.Text);
+                    _scenario.CreateNode<Then>(StepInfo).AddScreenCaptureFromBase64String(addScreenshot(driver, _scenarioContext));
                 else if (stepType == "And")
-                    scenario.CreateNode<And>(ScenarioStepContext.Current.StepInfo.Text);
+                    _scenario.CreateNode<And>(StepInfo).AddScreenCaptureFromBase64String(addScreenshot(driver, _scenarioContext));
             }
             else if (_scenarioContext.StepContext.TestError != null)
             {
                 if (stepType == "Given")
                 {
-                    scenario.CreateNode<Given>(ScenarioStepContext.Current.StepInfo.Text).Fail(_scenarioContext.StepContext.TestError.Message);
+                    _scenario.CreateNode<Given>(StepInfo).Fail(_scenarioContext.StepContext.TestError.Message,
+                        MediaEntityBuilder.CreateScreenCaptureFromBase64String(addScreenshot(driver, _scenarioContext)).Build());
                 }
                 else if (stepType == "When")
                 {
-                    scenario.CreateNode<When>(ScenarioStepContext.Current.StepInfo.Text).Fail(_scenarioContext.StepContext.TestError.Message);
+                    _scenario.CreateNode<When>(StepInfo).Fail(_scenarioContext.StepContext.TestError.Message,
+                        MediaEntityBuilder.CreateScreenCaptureFromBase64String(addScreenshot(driver, _scenarioContext)).Build());
                 }
                 else if (stepType == "Then")
                 {
-                    scenario.CreateNode<Then>(ScenarioStepContext.Current.StepInfo.Text).Fail(_scenarioContext.StepContext.TestError.Message);
+                    _scenario.CreateNode<Then>(StepInfo).Fail(_scenarioContext.StepContext.TestError.Message,
+                        MediaEntityBuilder.CreateScreenCaptureFromBase64String(addScreenshot(driver, _scenarioContext)).Build());
                 }
                 else if (stepType == "And")
                 {
-                    scenario.CreateNode<And>(ScenarioStepContext.Current.StepInfo.Text).Fail(_scenarioContext.StepContext.TestError.Message);
+                    _scenario.CreateNode<And>(StepInfo).Fail(_scenarioContext.StepContext.TestError.Message,
+                        MediaEntityBuilder.CreateScreenCaptureFromBase64String(addScreenshot(driver, _scenarioContext)).Build());
                 }
             }
+
         }
 
         [AfterScenario]
@@ -103,11 +113,13 @@ namespace SauceDemoSpecFlow.Stepdefinition.Hook
         [AfterTestRun]
         public static void AfterTestRun()
         {
-            extent.Flush();
             //kill the browser
+            ExtentReportStop();
         }
 
     }
+
+
 
 
 }

@@ -114,7 +114,7 @@ this.ScenarioInitialize(scenarioInfo);
 this.FeatureBackground();
 #line hidden
 #line 8
-    testRunner.And("Informo o nome de \"standard_user\" e \"secret_sauce\" válidos", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+    testRunner.And(string.Format("Informo o nome de \"{0}\" e \"{1}\" válidos", nome_User, passwd_User), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 9
     testRunner.When("Clico no botão login", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
